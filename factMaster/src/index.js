@@ -243,7 +243,7 @@ function handleRepeatRequest(intent, session, callback) {
 
 function handleFinishSessionRequest(intent, session, callback) {
     // End the session with a custom closing statment when the user wants to quit the game
-    var shouldEndSession = false;
+    var shouldEndSession = true;
     
     callback(session.attributes,
         buildSpeechletResponseWithoutCard("Thank you! I hope you have learned something new.", "", shouldEndSession));
