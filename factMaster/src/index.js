@@ -164,6 +164,8 @@ function onIntent(intentRequest, session, callback) {
         handleFinishSessionRequest(intent, session, callback);
     } else if ("AMAZON.YesIntent" === intentName) {
         getWelcomeResponse(callback);
+    } else if ("AMAZON.RepeatIntent" === intentName) {
+        handleRepeatRequest(intent, session, callback);
     }
 }
 
