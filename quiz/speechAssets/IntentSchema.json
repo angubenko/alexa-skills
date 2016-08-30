@@ -1,0 +1,31 @@
+{
+  "intents": [
+    {
+      "intent": "FactTypeIntent",
+      "slots": [
+        {
+          "name": "factType",
+          "type": "LIST_OF_FACT_TYPES"
+        }
+      ]
+    },
+    {
+      "intent": "AMAZON.RepeatIntent"
+	},
+    {
+      "intent": "AMAZON.HelpIntent"
+	},
+    {
+      "intent": "AMAZON.YesIntent"
+    },
+    {
+      "intent": "AMAZON.NoIntent"
+	},
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+	}
+  ]
+}
