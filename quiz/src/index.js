@@ -143,8 +143,8 @@ function onIntent(intentRequest, session, callback) {
     var intentName = intentRequest.intent.name;
     
     // dispatch custom intents to handlers here
-    if ("FactTypeIntent" === intentName) {
-        factTypeRequest(intent, session, callback);
+    if ("NewGameIntent" === intentName) {
+        hadleNewGameRequest(intent, session, callback);
     } else if ("AMAZON.HelpIntent" === intentName) {
         handleGetHelpRequest(intent, session, callback);
     } else if ("AMAZON.StopIntent" === intentName) {
@@ -171,13 +171,38 @@ function onSessionEnded(sessionEndedRequest, session) {
 
 
 var CARD_TITLE = "Fact Master"; 
+var GAME_LENGTH = 5;
 
 function getWelcomeResponse(callback) {
     var sessionAttributes = {};
-    var speechOutput = "Please name a field of science to hear an interesting fact. You can choose between mathematics, biology, history and physics.";
-    var repromptText = "You can say: tell me biology fact, I want to hear about biology or just say biology.";
-    var factType = "";
+    var speechOutput = "Welcom to the quiz app. To start a new game say start a new game";
+    var repromptText = "To start a new game say: start a new game or let's start.";
+    var questionsRemain = GAME_LENGTH;
+    var correctAnswers = 0;
+    var gameInprogress = false;
     var shouldEndSession = false;
+
+    sessionAttributes = {
+        "speechOutput": speechOutput,
+        "repromptText": repromptText,
+        "correctAnswers": factType,
+        "gameInprogress":,
+        "questionsRemain":,
+        "lastQuestion":,
+
+    };
+    callback(sessionAttributes,
+        buildSpeechletResponse(CARD_TITLE, speechOutput, repromptText, shouldEndSession));
+}
+
+function hadleNewGameRequest(intent, session, callback) {
+    var sessionAttributes = {};
+    var speechOutput;
+    var factType = intent.slots.factType.value;
+    var repromptText = speechOutput;
+    var shouldEndSession = false;
+    // - TODO generate question list
+    // - ask first question
 
     sessionAttributes = {
         "speechOutput": speechOutput,
@@ -188,34 +213,19 @@ function getWelcomeResponse(callback) {
         buildSpeechletResponse(CARD_TITLE, speechOutput, repromptText, shouldEndSession));
 }
 
-function factTypeRequest(intent, session, callback) {
-    var sessionAttributes = {};
-    var speechOutput;
-    var factType = intent.slots.factType.value;
-    // Check if response between supported fact types
-    if (factType === 'mathematics' || factType === 'math' || 
-        factType === 'biology' || factType === 'physics' || factType === 'history') {
-        var fact = getFact(factType);
-        speechOutput = "Did you know " + fact + ". Do you want another fact?";
-    } else {
-        speechOutput = "I didn't recongnise a science field. Please choose from mathematics, biology, physics and history."
-    }
-    var repromptText = speechOutput;
-    var shouldEndSession = false;
+// handle user's question answer
+function handleQuestionAnswer(intent, session, callback) {
 
-    sessionAttributes = {
-        "speechOutput": speechOutput,
-        "repromptText": repromptText,
-        "factType": factType,
-    };
-    callback(sessionAttributes,
-        buildSpeechletResponse(CARD_TITLE, speechOutput, repromptText, shouldEndSession));
 }
 
 function handleGetHelpRequest(intent, session, callback) {
     // Do not edit the help dialogue. This has been created by the Alexa team to demonstrate best practices.
-    var speechOutput = "To hear an interesting fact, name a field of science. You can choose between mathematics, biology, history and physics. You can say: tell me biology fact, I want to hear about biology or just say biology.",
-        repromptText = speechOutput;
+    if gameInprogress {
+        var speechOutput = "To continue playing please answer the question."
+    } else {
+        var speechOutput = "To start a new game say: start a new game or let's start.";
+    }
+    repromptText = speechOutput;
     var shouldEndSession = false;
     
     
