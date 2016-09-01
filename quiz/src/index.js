@@ -188,7 +188,7 @@ function getWelcomeResponse(callback) {
         "speechOutput": speechOutput,
         "repromptText": repromptText,
         "correctAnswers": correctAnswers,
-        "gameInprogress": gameInProgress,
+        "gameInProgress": gameInProgress,
         "questionIndex": questionIndex,
 
     };
@@ -231,26 +231,31 @@ function handleQuestionAnswer(intent, session, callback) {
     var repromptText = "Please answer the following question. " + questions[INDEX_ARRAY[questionIndex]].question;
     var shouldEndSession = false;
 
-    if (gameInProgress) {
-        // Handle question answer
-        if(intent.slots.answer.value.toString().toLowerCase() == questions[INDEX_ARRAY[questionIndex]].answer) {
-            correctAnswers += 1;
-            speechOutput = "Kudos! ";
-        } else {
-            speechOutput = "Wrong! Correct answer is " + questions[INDEX_ARRAY[questionIndex]].answer + " . ";
-        }
-        // Check if game should be ended
-        if (questionIndex === GAME_LENGTH) {
-            speechOutput += "That was your last question. You got " + correctAnswers.toString() + " correct out of " + GAME_LENGTH.toString() + " . Say start to start a new game or stop to exit.";
-            gameInProgress = false;
-        } else {
-            questionIndex += 1;
-            speechOutput += "Here is the next question. " + questions[INDEX_ARRAY[questionIndex]].question;
-            gameInProgress = true;
-        }
+    if (intent.slots.answer.value == null) {
+            speechOutput = "I'm sorry, I haven't recongnised your answer. Say my answer is or just tell me what your answer is."
+            repromptText = speechOutput;
     } else {
-        speechOutput = "I'm sorry, there is no game in progress. Say start to start a new game or stop to exit."
-        repromptText = speechOutput;
+        if (gameInProgress) {
+            // Handle question answer
+            if(intent.slots.answer.value.toString().toLowerCase() == questions[INDEX_ARRAY[questionIndex]].answer) {
+                correctAnswers += 1;
+                speechOutput = "Kudos! ";
+            } else {
+                speechOutput = "Wrong! Correct answer is " + questions[INDEX_ARRAY[questionIndex]].answer + ". ";
+            }
+            // Check if game should be ended
+            if (questionIndex === GAME_LENGTH) {
+                speechOutput += "That was your last question. You got " + correctAnswers.toString() + " correct out of " + GAME_LENGTH.toString() + " . Say start to start a new game or stop to exit.";
+                gameInProgress = false;
+            } else {
+                questionIndex += 1;
+                speechOutput += "Here is the next question. " + questions[INDEX_ARRAY[questionIndex]].question;
+                gameInProgress = true;
+            }
+        } else {
+            speechOutput = "I'm sorry, there is no game in progress. Say start to start a new game or stop to exit."
+            repromptText = speechOutput;
+        }
     }
 
     sessionAttributes = {
@@ -266,23 +271,31 @@ function handleQuestionAnswer(intent, session, callback) {
 
 function handleGetHelpRequest(intent, session, callback) {
     var sessionAttributes = {};
-    var gameInProgress = session.attributes.gameInProgress;
-    var correctAnswers = session.attributes.correctAnswers;
-    var questionIndex = session.attributes.questionIndex;
-    var speechOutput = "";
-
-    if (gameInProgress) {
-        speechOutput = "To continue playing please answer the following question ." + questions[INDEX_ARRAY[questionIndex]].question;
+    var gameInProgress;
+    var questionIndex;
+    var correctAnswers;
+    if (session.attributes){
+        gameInProgress = session.attributes.gameInProgress;
+        questionIndex = session.attributes.questionIndex;
+        correctAnswers = session.attributes.correctAnswers;
     } else {
-        speechOutput = "To start a new game say: start a new game or lets start.";
+        gameInProgress = false;
+        correctAnswers = 0;
+        questionIndex = 0;
     }
+
+    var speechOutput = "To start a new game say: start a new game or lets start.";
+    if (gameInProgress) {
+        speechOutput = "To continue playing please answer the following question. " + questions[INDEX_ARRAY[questionIndex]].question;
+    }
+
     var repromptText = speechOutput;
     var shouldEndSession = false;
     
     
     sessionAttributes = {
         "speechOutput": speechOutput,
-        "repromptText": speechOutput,
+        "repromptText": repromptText,
         "correctAnswers": correctAnswers,
         "gameInProgress": gameInProgress,
         "questionIndex": questionIndex,
