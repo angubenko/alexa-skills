@@ -1,10 +1,10 @@
-FactTypeIntent tell me about {factType}
-FactTypeIntent I want to hear about {factType}
-FactTypeIntent give me a {factType}
-FactTypeIntent give me {factType}
-FactTypeIntent give me a {factType} fact
-FactTypeIntent I want {factType}
-FactTypeIntent let's do {factType}
-FactTypeIntent let's go with {factType}
-FactTypeIntent I'll go with {factType}
-FactTypeIntent {factType}
+NewGameIntent start a new game
+NewGameIntent let's start
+NewGameIntent start new game
+NewGameIntent start game
+NewGameIntent start a game
+NewGameIntent start
+NewGameIntent let's go
+
+AnswerIntent {answer}
+AnswerIntent my answer is {answer}

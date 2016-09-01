@@ -1,11 +1,13 @@
 {
   "intents": [
+    { "intent": "NewGameIntent"
+    },
     {
-      "intent": "FactTypeIntent",
+      "intent": "AnswerIntent",
       "slots": [
         {
-          "name": "factType",
-          "type": "LIST_OF_FACT_TYPES"
+          "name": "answer",
+          "type": "LIST_OF_ANSWERS"
         }
       ]
     },
@@ -14,12 +16,6 @@
 	},
     {
       "intent": "AMAZON.HelpIntent"
-	},
-    {
-      "intent": "AMAZON.YesIntent"
-    },
-    {
-      "intent": "AMAZON.NoIntent"
 	},
     {
       "intent": "AMAZON.StopIntent"

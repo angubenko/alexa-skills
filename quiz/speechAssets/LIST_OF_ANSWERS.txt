@@ -1,0 +1,20 @@
+flip-flop
+2
+unicode
+jpeg
+cylinder
+assembler
+compiler
+cpu cycle
+instructions
+control unit
+interface
+1
+fifo
+first in first out
+pointer
+linker
+lifo
+queue
+stack
+hash table
