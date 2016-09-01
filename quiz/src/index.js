@@ -6,81 +6,85 @@
  */
 var questions = [
     {
-        "A means of encoding text in which each symbol is represented by 16 bits is called": [
-            "Unicode"
-        ]
+        question: "A means of encoding text in which each symbol is represented by 16 bits is called",
+        answer: "unicode"
     },
     {
-        "A digital circuit capable of holding a single digit is called?": [
-            "Flip-flop"
-            
-        ]
+        question: "A digital circuit capable of holding a single digit is called?",
+        answer:   "flip-flop"
     },
     {
-        "A means of compressing images by blurring the boundaries between different colors while maintaining all brightness information ?": [
-            "JPEG"
-        ]
+        question: "A means of compressing images by blurring the boundaries between different colors while maintaining all brightness information ?",
+        answer:    "jpeg"
     },
     {
-        "The tracks on a disk which can be accessed without repositioning the R/W heads is?": [
-            "Cylinder"
-        ]
+        question: "The tracks on a disk which can be accessed without repositioning the R/W heads is?",
+        answer:    "cylinder"
     },
     {
-        "The binary system uses powers of?": [
-            "two"
-        ]
+        question: "The binary system uses powers of?",
+        answer:    "2"
     },
     {
-        "A computer program that converts assembly language to machine language is": [
-            "Assembler"
-        ]
+        question: "A computer program that converts assembly language to machine language is",
+        answer:    "assembler"
     },
     {
-        "A computer program that compiles code is": [
-            "Compiler"
-        ]
+        question: "A computer program that compiles code is",
+        answer:    "compiler"
     },
     {
-        "The time required for the fetching and execution of one simple machine instruction is": [
-            "CPU cycle"
-        ]
+        question: "The time required for the fetching and execution of one simple machine instruction is",
+        answer:    "cpu cycle"
     },
     {
-        "The section of the CPU that selects, interprets and sees to the execution of program": [
-            "Instructions"
-        ]
+        question: "The section of the CPU that selects, interprets and sees to the execution of program",
+        answer:    "instructions"
     },
     {
-        "A common boundary between two systems is called": [
-            "interface"
-        ]
+        question: "A common boundary between two systems is called",
+        answer:    "interface"
     },
     {
-        "The section of the CPU that selects, interprets and sees to the execution of program instructions": [
-            "Control unit"
-        ]
+        question: "The section of the CPU that selects, interprets and sees to the execution of program instructions",
+        answer:    "control unit"
     },
     {
-        "To avoid the race condition, the number of processes that may be simultaneously inside their critical section is": [
-            "one"
-        ]
+        question: "To avoid the race condition, the number of processes that may be simultaneously inside their critical section is",
+        answer:    "1"
     },
     {
-        "The algorithm that executes first the job that first entered the queue is called": [
-            "FIFO"
-        ]
+        question: "The algorithm that executes first the job that first entered the queue is called",
+        answer:   "fifo"
     },
     {
-        "The register or main memory location which contains the effective address of the operand is known as": [
-            "Pointer"
-        ]
+        question: "The register or main memory location which contains the effective address of the operand is known as",
+        answer:   "pointer"
     },
     {
-        "Resolution of externally defined symbols is performed by": [
-            "Linker"
-        ]
+        question: "Resolution of externally defined symbols is performed by",
+        answer:   "linker"
     },
+    {
+        question: "The algorithm that executes first the job that last entered the queue is called",
+        answer:   "lifo"
+    },
+    {
+        question: "The data structure which uses FIFO algorithm to access the data",
+        answer: "queue"
+    },
+    {
+        question: "The data structure which uses LIFO algorithm to access the data",
+        answer: "stack"
+    },
+    {
+        question: "Which data structure is used to implement associative array and can map keys to values",
+        answer: "hash table"
+    },
+    {
+        question: "Value that enables a program to indirectly access a particular memory location",
+        answer: "reference"
+    }
 ];
 
 
@@ -144,17 +148,15 @@ function onIntent(intentRequest, session, callback) {
     
     // dispatch custom intents to handlers here
     if ("NewGameIntent" === intentName) {
-        hadleNewGameRequest(intent, session, callback);
+        handleNewGameRequest(intent, session, callback);
+    } else if ("AnswerIntent" === intentName) {
+        handleQuestionAnswer(intent, session, callback);
     } else if ("AMAZON.HelpIntent" === intentName) {
         handleGetHelpRequest(intent, session, callback);
     } else if ("AMAZON.StopIntent" === intentName) {
         handleFinishSessionRequest(intent, session, callback);
     } else if ("AMAZON.CancelIntent" === intentName) {
         handleFinishSessionRequest(intent, session, callback);
-    } else if ("AMAZON.NoIntent" === intentName) {
-        handleFinishSessionRequest(intent, session, callback);
-    } else if ("AMAZON.YesIntent" === intentName) {
-        getWelcomeResponse(callback);
     } else if ("AMAZON.RepeatIntent" === intentName) {
         handleRepeatRequest(intent, session, callback);
     }
@@ -169,45 +171,50 @@ function onSessionEnded(sessionEndedRequest, session) {
 
 // ------- Skill specific business logic -------
 
-
-var CARD_TITLE = "Fact Master"; 
+var CARD_TITLE = "Computer Science Quiz"; 
 var GAME_LENGTH = 5;
+for (var INDEX_ARRAY=[],i=0;i<questions.length;++i) INDEX_ARRAY[i]=i;
 
 function getWelcomeResponse(callback) {
     var sessionAttributes = {};
-    var speechOutput = "Welcom to the quiz app. To start a new game say start a new game";
-    var repromptText = "To start a new game say: start a new game or let's start.";
-    var questionsRemain = GAME_LENGTH;
+    var speechOutput = "Welcome to the computer science quiz app. To start a new game say start.";
+    var repromptText = "To start a new game say: start a new game or just start.";
     var correctAnswers = 0;
-    var gameInprogress = false;
+    var gameInProgress = false;
+    var questionIndex = 0;
     var shouldEndSession = false;
 
     sessionAttributes = {
         "speechOutput": speechOutput,
         "repromptText": repromptText,
-        "correctAnswers": factType,
-        "gameInprogress":,
-        "questionsRemain":,
-        "lastQuestion":,
+        "correctAnswers": correctAnswers,
+        "gameInprogress": gameInProgress,
+        "questionIndex": questionIndex,
 
     };
     callback(sessionAttributes,
         buildSpeechletResponse(CARD_TITLE, speechOutput, repromptText, shouldEndSession));
 }
 
-function hadleNewGameRequest(intent, session, callback) {
+function handleNewGameRequest(intent, session, callback) {
     var sessionAttributes = {};
-    var speechOutput;
-    var factType = intent.slots.factType.value;
-    var repromptText = speechOutput;
+
+    INDEX_ARRAY = shuffleArray(INDEX_ARRAY);
+
+    var questionIndex = 1;
+    var gameInProgress = true;
+    var correctAnswers = 0;
+    var speechOutput = "Here is the first question. " + questions[INDEX_ARRAY[questionIndex]].question;
+    var repromptText = "Please answer the following question. " + questions[INDEX_ARRAY[questionIndex]].question;
     var shouldEndSession = false;
-    // - TODO generate question list
-    // - ask first question
+
 
     sessionAttributes = {
         "speechOutput": speechOutput,
         "repromptText": repromptText,
-        "factType": factType,
+        "correctAnswers": correctAnswers,
+        "gameInProgress": gameInProgress,
+        "questionIndex": questionIndex,
     };
     callback(sessionAttributes,
         buildSpeechletResponse(CARD_TITLE, speechOutput, repromptText, shouldEndSession));
@@ -215,32 +222,85 @@ function hadleNewGameRequest(intent, session, callback) {
 
 // handle user's question answer
 function handleQuestionAnswer(intent, session, callback) {
+    var sessionAttributes = {};
 
+    var questionIndex = session.attributes.questionIndex;
+    var gameInProgress = session.attributes.gameInProgress;
+    var correctAnswers = session.attributes.correctAnswers;
+    var speechOutput = "";
+    var repromptText = "Please answer the following question. " + questions[INDEX_ARRAY[questionIndex]].question;
+    var shouldEndSession = false;
+
+    if (gameInProgress) {
+        // Handle question answer
+        if(intent.slots.answer.value.toString().toLowerCase() == questions[INDEX_ARRAY[questionIndex]].answer) {
+            correctAnswers += 1;
+            speechOutput = "Kudos! ";
+        } else {
+            speechOutput = "Wrong! Correct answer is " + questions[INDEX_ARRAY[questionIndex]].answer + " . ";
+        }
+        // Check if game should be ended
+        if (questionIndex === GAME_LENGTH) {
+            speechOutput += "That was your last question. You got " + correctAnswers.toString() + " correct out of " + GAME_LENGTH.toString() + " . Say start to start a new game or stop to exit.";
+            gameInProgress = false;
+        } else {
+            questionIndex += 1;
+            speechOutput += "Here is the next question. " + questions[INDEX_ARRAY[questionIndex]].question;
+            gameInProgress = true;
+        }
+    } else {
+        speechOutput = "I'm sorry, there is no game in progress. Say start to start a new game or stop to exit."
+        repromptText = speechOutput;
+    }
+
+    sessionAttributes = {
+        "speechOutput": speechOutput,
+        "repromptText": repromptText,
+        "correctAnswers": correctAnswers,
+        "gameInProgress": gameInProgress,
+        "questionIndex": questionIndex,
+    };
+    callback(sessionAttributes,
+        buildSpeechletResponse(CARD_TITLE, speechOutput, repromptText, shouldEndSession));
 }
 
 function handleGetHelpRequest(intent, session, callback) {
-    // Do not edit the help dialogue. This has been created by the Alexa team to demonstrate best practices.
-    if gameInprogress {
-        var speechOutput = "To continue playing please answer the question."
+    var sessionAttributes = {};
+    var gameInProgress = session.attributes.gameInProgress;
+    var correctAnswers = session.attributes.correctAnswers;
+    var questionIndex = session.attributes.questionIndex;
+    var speechOutput = "";
+
+    if (gameInProgress) {
+        speechOutput = "To continue playing please answer the following question ." + questions[INDEX_ARRAY[questionIndex]].question;
     } else {
-        var speechOutput = "To start a new game say: start a new game or let's start.";
+        speechOutput = "To start a new game say: start a new game or lets start.";
     }
-    repromptText = speechOutput;
+    var repromptText = speechOutput;
     var shouldEndSession = false;
     
     
-    callback(session.attributes,
-        buildSpeechletResponseWithoutCard(speechOutput, repromptText, shouldEndSession));
+    sessionAttributes = {
+        "speechOutput": speechOutput,
+        "repromptText": speechOutput,
+        "correctAnswers": correctAnswers,
+        "gameInProgress": gameInProgress,
+        "questionIndex": questionIndex,
+    };
+    callback(sessionAttributes,
+        buildSpeechletResponse(CARD_TITLE, speechOutput, repromptText, shouldEndSession));
 }
 
 function handleRepeatRequest(intent, session, callback) {
     // Repeat the previous speechOutput and repromptText from the session attributes if available
     // else start a new game session
+    var shouldEndSession = false;
+    
     if (!session.attributes || !session.attributes.speechOutput) {
         getWelcomeResponse(callback);
     } else {
         callback(session.attributes,
-            buildSpeechletResponseWithoutCard(session.attributes.speechOutput, session.attributes.repromptText, false));
+            buildSpeechletResponseWithoutCard(session.attributes.speechOutput, session.attributes.repromptText, shouldEndSession));
     }
 }
 
@@ -252,23 +312,15 @@ function handleFinishSessionRequest(intent, session, callback) {
         buildSpeechletResponseWithoutCard("Thank you! I hope you have learned something new.", "", shouldEndSession));
 }
 
-function getFact(factType){
-    var fact, random;
-
-    if (factType === 'mathematics' || factType === 'math') {
-        random = Math.floor(Math.random() * (mathFacts.length - 0 + 1) + 0);
-        fact = mathFacts[random];
-    } else if (factType === 'biology') {
-        random = Math.floor(Math.random() * (biologyFacts.length - 0 + 1) + 0);
-        fact = biologyFacts[random];
-    } else if (factType === 'physics') {
-        random = Math.floor(Math.random() * (physicsFacts.length - 0 + 1) + 0);
-        fact = physicsFacts[random];
-    } else if (factType === 'history') {
-        random = Math.floor(Math.random() * (historyFacts.length - 0 + 1) + 0);
-        fact = historyFacts[random];
-    }
-    return fact;
+function shuffleArray(array) {
+  var tmp, current, top = array.length;
+  if(top) while(--top) {
+    current = Math.floor(Math.random() * (top + 1));
+    tmp = array[current];
+    array[current] = array[top];
+    array[top] = tmp;
+  }
+  return array;
 }
 
 // ------- Helper functions to build responses -------
