@@ -1,11 +1,11 @@
 {
   "intents": [
     {
-      "intent": "FactTypeIntent",
+      "intent": "GiveMeConstantIntent",
       "slots": [
         {
-          "name": "factType",
-          "type": "LIST_OF_FACT_TYPES"
+          "name": "constant",
+          "type": "CONSTANT_TYPE"
         }
       ]
     },
@@ -14,12 +14,6 @@
 	},
     {
       "intent": "AMAZON.HelpIntent"
-	},
-    {
-      "intent": "AMAZON.YesIntent"
-    },
-    {
-      "intent": "AMAZON.NoIntent"
 	},
     {
       "intent": "AMAZON.StopIntent"

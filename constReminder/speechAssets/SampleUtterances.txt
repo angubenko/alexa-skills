@@ -1,10 +1,10 @@
-FactTypeIntent tell me about {factType}
-FactTypeIntent I want to hear about {factType}
-FactTypeIntent give me a {factType}
-FactTypeIntent give me {factType}
-FactTypeIntent give me a {factType} fact
-FactTypeIntent I want {factType}
-FactTypeIntent let's do {factType}
-FactTypeIntent let's go with {factType}
-FactTypeIntent I'll go with {factType}
-FactTypeIntent {factType}
+GiveMeConstantIntent give me a {constant}
+GiveMeConstantIntent give me {constant}
+GiveMeConstantIntent give me value of {constant}
+GiveMeConstantIntent give me the value of {constant}
+GiveMeConstantIntent give me a {constant} constant
+GiveMeConstantIntent what's {constant}
+GiveMeConstantIntent what is the {constant}
+GiveMeConstantIntent I want {constant}
+GiveMeConstantIntent let's go with {constant}
+GiveMeConstantIntent {constant}

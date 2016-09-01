@@ -1,0 +1,10 @@
+eulers number
+archimedes constant
+pi number
+pythagoras constant
+imaginary unit
+the golden ratio
+the euler mascheroni constant
+universal parabolic constant
+landaus constant
+pi
