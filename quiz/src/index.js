@@ -274,6 +274,7 @@ function handleGetHelpRequest(intent, session, callback) {
     var gameInProgress;
     var questionIndex;
     var correctAnswers;
+
     if (session.attributes){
         gameInProgress = session.attributes.gameInProgress;
         questionIndex = session.attributes.questionIndex;
@@ -284,12 +285,14 @@ function handleGetHelpRequest(intent, session, callback) {
         questionIndex = 0;
     }
 
-    var speechOutput = "To start a new game say: start a new game or lets start.";
+    //var speechOutput = "To start a new game say: start a new game or lets start.";
+    var speechOutput = "This is a computer science quiz app. During quiz, I will ask you 5 computer science related questions. Dou you want to start? You may say start a new quiz or just start to begin. To exit anytime say stop or cancel.";
+
     if (gameInProgress) {
         speechOutput = "To continue playing please answer the following question. " + questions[INDEX_ARRAY[questionIndex]].question;
     }
 
-    var repromptText = speechOutput;
+    var repromptText = "To start the quiz say start a new quiz or just start. To exit anytime say stop or cancel.";
     var shouldEndSession = false;
     
     
